@@ -1,4 +1,4 @@
-public class GraficaDecorator implements ServicioI {
+public class GraficaDecorator {
 
     private final ServicioCheckForCellLiveOrDie service;
 
@@ -24,7 +24,7 @@ public class GraficaDecorator implements ServicioI {
     private GraficaDecorator(ServicioCheckForCellLiveOrDie servicioCheckForCellLiveOrDie) {
         this.service = servicioCheckForCellLiveOrDie;
     }
-    public static ServicioI decorateService(ServicioCheckForCellLiveOrDie servicioCheckForCellLiveOrDie) {
+    public static GraficaDecorator decorateService(ServicioCheckForCellLiveOrDie servicioCheckForCellLiveOrDie) {
         return new GraficaDecorator(servicioCheckForCellLiveOrDie);
     };
 
@@ -39,13 +39,11 @@ public class GraficaDecorator implements ServicioI {
         }
         stringHandler.print();
     }
-    @Override
     public Estado tick() {
         Estado estado = service.tick();
         graficar(estado);
         return estado;
     }
-    @Override
     public boolean subtick(int row, int columna) {
         Estado estado = service.tick();
         graficar(estado);

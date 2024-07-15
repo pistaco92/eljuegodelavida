@@ -1,4 +1,4 @@
-public class ServicioCheckForCellLiveOrDie implements ServicioI {
+public class ServicioCheckForCellLiveOrDie {
 
     private Estado estado;
     private boolean[][] nextGen;
@@ -33,7 +33,7 @@ public class ServicioCheckForCellLiveOrDie implements ServicioI {
         this.nextGen = nextGen;
     }
 
-    public static ServicioI createFromEstado(Estado estado) {
+    public static ServicioCheckForCellLiveOrDie createFromEstado(Estado estado) {
         int rowI = estado.getColumnLen();
         int columnI = estado.getColumnLen();
         boolean[][] nextGen = new boolean[rowI][columnI];
@@ -41,7 +41,7 @@ public class ServicioCheckForCellLiveOrDie implements ServicioI {
         return new ServicioCheckForCellLiveOrDie(estado, nextGen);
 
     };
-    static ServicioI createFromSeed(Estado estado, boolean[][] seed) {
+    static ServicioCheckForCellLiveOrDie createFromSeed(Estado estado, boolean[][] seed) {
         int rowI = seed.length;
         int columnI = seed[0].length;
         boolean[][] nextGen = new boolean[rowI][columnI];
@@ -89,7 +89,6 @@ public class ServicioCheckForCellLiveOrDie implements ServicioI {
         return conteo.vivas == umbralRevivir && !estado.getData(row, columna);
     }
 
-    @Override
     public Estado tick() {
         for (int row = 0; row < estado.getRowLen(); row ++) {
             for (int columna = 0; columna < estado.getColumnLen(); columna++) {
@@ -99,7 +98,6 @@ public class ServicioCheckForCellLiveOrDie implements ServicioI {
         return Estado.fromNextGen(nextGen);
     }
 
-    @Override
     public boolean subtick(int row, int columna) {
         boolean overcheck, hipercheck, revivirCheck;
         overcheck = overpoplacion(row, columna);

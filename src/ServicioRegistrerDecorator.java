@@ -1,10 +1,8 @@
-public class ServicioRegistrerDecorator implements ServicioI {
-    @Override
+public class ServicioRegistrerDecorator {
     public Estado tick() {
         return null;
     }
 
-    @Override
     public boolean subtick(int row, int columna) {
         return false;
     }

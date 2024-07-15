@@ -2,7 +2,7 @@ public class Juego {
 
     public static void run(boolean[][] seed) {
         Factory factory = Factory.createFactoryObject();
-        ServicioI servicio = factory.setSeed(seed).createGrafic().build();
+        GraficaDecorator servicio = factory.setSeed(seed).createGrafic().build();
         Estado estado = servicio.tick();
         sleep();
         runInfinito(estado);
@@ -10,7 +10,7 @@ public class Juego {
 
     private static void runInfinito(Estado estadoNextGen) {
         Factory factory = Factory.createFactoryObject();
-        ServicioI servicio = factory.setSeedFromNextGeneration(estadoNextGen).createGrafic().build();
+        GraficaDecorator servicio = factory.setSeedFromNextGeneration(estadoNextGen).createGrafic().build();
         Estado estado = servicio.tick();
         sleep();
         runInfinito(estado);
