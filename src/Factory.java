@@ -28,12 +28,12 @@ public class Factory {
 
     public Factory createGrafic() {
         if (!serviceCreated) {
-            Servicio servicio = (Servicio) Servicio.createFromEstado(estado_);
+            ServicioCheckForCellLiveOrDie servicioCheckForCellLiveOrDie = (ServicioCheckForCellLiveOrDie) ServicioCheckForCellLiveOrDie.createFromEstado(estado_);
             serviceCreated = true;
-            servicio_ = GraficaDecorator.decorateService(servicio);
+            servicio_ = GraficaDecorator.decorateService(servicioCheckForCellLiveOrDie);
             withGrafic = true;
         } else {
-            servicio_ = GraficaDecorator.decorateService((Servicio) servicio_);
+            servicio_ = GraficaDecorator.decorateService((ServicioCheckForCellLiveOrDie) servicio_);
             withGrafic = true;
         }
         return this;
@@ -45,6 +45,6 @@ public class Factory {
 
     public static ServicioI createServiceWithState(boolean[][] seed ) {
         Estado estado = Estado.setseed(seed);
-        return Servicio.createFromSeed(estado, seed);
+        return ServicioCheckForCellLiveOrDie.createFromSeed(estado, seed);
     }
 }

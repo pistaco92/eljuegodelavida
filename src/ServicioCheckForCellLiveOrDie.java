@@ -1,7 +1,10 @@
-public class Servicio implements ServicioI {
+public class ServicioCheckForCellLiveOrDie implements ServicioI {
 
     private Estado estado;
     private boolean[][] nextGen;
+
+
+    private static int umbralOverPoblacion = 2, umbralHiperPoblacion = 3, umbralRevivir = 3;
 
     private static class SorroundingsCountCommand {
         int vivas = 0, muertas = 0;
@@ -17,15 +20,15 @@ public class Servicio implements ServicioI {
     }
 
     private static class CheckLimitComand {
-        public static int limite;
+        public static int limiteSuperior, limiteInferior = 0;
 
 
         public static boolean execute(int row, int columna) {
-            return row < limite && columna < limite && row >= 0 && columna >= 0;
+            return row < limiteSuperior && columna < limiteSuperior && row >= limiteInferior && columna >= limiteInferior;
         }
     }
 
-    private Servicio(Estado estado, boolean[][] nextGen) {
+    private ServicioCheckForCellLiveOrDie(Estado estado, boolean[][] nextGen) {
         this.estado = estado;
         this.nextGen = nextGen;
     }
@@ -34,28 +37,28 @@ public class Servicio implements ServicioI {
         int rowI = estado.getColumnLen();
         int columnI = estado.getColumnLen();
         boolean[][] nextGen = new boolean[rowI][columnI];
-        CheckLimitComand.limite = rowI;
-        return new Servicio(estado, nextGen);
+        CheckLimitComand.limiteSuperior = rowI;
+        return new ServicioCheckForCellLiveOrDie(estado, nextGen);
 
     };
     static ServicioI createFromSeed(Estado estado, boolean[][] seed) {
         int rowI = seed.length;
         int columnI = seed[0].length;
         boolean[][] nextGen = new boolean[rowI][columnI];
-        Servicio.CheckLimitComand.limite = rowI;
-        return new Servicio(estado, nextGen);
+        ServicioCheckForCellLiveOrDie.CheckLimitComand.limiteSuperior = rowI;
+        return new ServicioCheckForCellLiveOrDie(estado, nextGen);
     }
 
 
-    private void checkSorrundinghelper(int row, int columna, Servicio.SorroundingsCountCommand conteo) {
-        if (Servicio.CheckLimitComand.execute(row, columna)) {
+    private void checkSorrundinghelper(int row, int columna, ServicioCheckForCellLiveOrDie.SorroundingsCountCommand conteo) {
+        if (ServicioCheckForCellLiveOrDie.CheckLimitComand.execute(row, columna)) {
             boolean casilla = estado.getData(row, columna);
             conteo.execute(casilla);
         }
 
     }
 
-    private void checkSorroundings(int row, int columna, Servicio.SorroundingsCountCommand conteo) {
+    private void checkSorroundings(int row, int columna, ServicioCheckForCellLiveOrDie.SorroundingsCountCommand conteo) {
         checkSorrundinghelper(row - 1, columna, conteo);
         checkSorrundinghelper(row + 1, columna, conteo);
         checkSorrundinghelper(row, columna - 1, conteo);
@@ -70,20 +73,20 @@ public class Servicio implements ServicioI {
     public boolean overpoplacion(int row, int columna) {
         SorroundingsCountCommand conteo = new SorroundingsCountCommand();
         checkSorroundings(row, columna, conteo);
-        return conteo.vivas < 2 && estado.getData(row, columna);
+        return conteo.vivas < umbralOverPoblacion && estado.getData(row, columna);
     };
 
 
     public boolean hiperpoblacion(int row, int columna) {
         SorroundingsCountCommand conteo = new SorroundingsCountCommand();
         checkSorroundings(row, columna, conteo);
-        return conteo.vivas > 3 && estado.getData(row, columna);
+        return conteo.vivas > umbralHiperPoblacion && estado.getData(row, columna);
     };
 
     private boolean revivir(int row, int columna) {
         SorroundingsCountCommand conteo = new SorroundingsCountCommand();
         checkSorroundings(row, columna, conteo);
-        return conteo.vivas == 3 && !estado.getData(row, columna);
+        return conteo.vivas == umbralRevivir && !estado.getData(row, columna);
     }
 
     @Override

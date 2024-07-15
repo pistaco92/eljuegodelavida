@@ -1,6 +1,6 @@
 public class GraficaDecorator implements ServicioI {
 
-    private final Servicio service;
+    private final ServicioCheckForCellLiveOrDie service;
 
     private static class StringHandler {
 
@@ -21,11 +21,11 @@ public class GraficaDecorator implements ServicioI {
             System.out.println(text);
         }
     }
-    private GraficaDecorator(Servicio servicio) {
-        this.service = servicio;
+    private GraficaDecorator(ServicioCheckForCellLiveOrDie servicioCheckForCellLiveOrDie) {
+        this.service = servicioCheckForCellLiveOrDie;
     }
-    public static ServicioI decorateService(Servicio servicio) {
-        return new GraficaDecorator(servicio);
+    public static ServicioI decorateService(ServicioCheckForCellLiveOrDie servicioCheckForCellLiveOrDie) {
+        return new GraficaDecorator(servicioCheckForCellLiveOrDie);
     };
 
     private void graficar(Estado estado) {
