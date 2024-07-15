@@ -1,8 +1,11 @@
+import javax.management.ObjectName;
+
 public class Factory {
 
 
     private Estado estado_;
-    private ServicioI servicio_;
+    private ServicioCheckForCellLiveOrDie servicio_;
+    private GraficaDecorator servicioWithGrafic;
 
     private boolean withGrafic;
     private boolean seedSet;
@@ -10,6 +13,7 @@ public class Factory {
     public static Factory createFactoryObject() {
         return new Factory();
     }
+
 
     public Factory setSeed(boolean[][] seed) {
         if (!seedSet) {
@@ -30,21 +34,24 @@ public class Factory {
         if (!serviceCreated) {
             ServicioCheckForCellLiveOrDie servicioCheckForCellLiveOrDie = (ServicioCheckForCellLiveOrDie) ServicioCheckForCellLiveOrDie.createFromEstado(estado_);
             serviceCreated = true;
-            servicio_ = GraficaDecorator.decorateService(servicioCheckForCellLiveOrDie);
+            servicioWithGrafic = GraficaDecorator.decorateService(servicioCheckForCellLiveOrDie);
             withGrafic = true;
         } else {
-            servicio_ = GraficaDecorator.decorateService((ServicioCheckForCellLiveOrDie) servicio_);
+            servicioWithGrafic = GraficaDecorator.decorateService((ServicioCheckForCellLiveOrDie) servicio_);
             withGrafic = true;
         }
         return this;
     };
 
-    public ServicioI build() {
-        return servicio_;
+    public <T> T build() {
+        if (withGrafic) {
+            return (T) servicioWithGrafic;
+        }
+        return (T) servicio_;
     }
 
-    public static ServicioI createServiceWithState(boolean[][] seed ) {
+    public static <T> T createServiceWithState(boolean[][] seed ) {
         Estado estado = Estado.setseed(seed);
-        return ServicioCheckForCellLiveOrDie.createFromSeed(estado, seed);
+        return (T) ServicioCheckForCellLiveOrDie.createFromSeed(estado, seed);
     }
 }
