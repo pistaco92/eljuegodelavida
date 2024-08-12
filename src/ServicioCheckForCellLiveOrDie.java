@@ -50,24 +50,24 @@ public class ServicioCheckForCellLiveOrDie {
     }
 
 
-    private void checkSorrundinghelper(int row, int columna, ServicioCheckForCellLiveOrDie.SorroundingsCountCommand conteo) {
-        if (ServicioCheckForCellLiveOrDie.CheckLimitComand.execute(row, columna)) {
-            boolean casilla = estado.getData(row, columna);
-            conteo.execute(casilla);
-        }
-
-    }
-
     private void checkSorroundings(int row, int columna, ServicioCheckForCellLiveOrDie.SorroundingsCountCommand conteo) {
-        checkSorrundinghelper(row - 1, columna, conteo);
-        checkSorrundinghelper(row + 1, columna, conteo);
-        checkSorrundinghelper(row, columna - 1, conteo);
-        checkSorrundinghelper(row, columna + 1, conteo);
 
-        checkSorrundinghelper(row + 1, columna + 1, conteo);
-        checkSorrundinghelper(row - 1, columna + 1, conteo);
-        checkSorrundinghelper(row - 1, columna - 1, conteo);
-        checkSorrundinghelper(row + 1, columna - 1, conteo);
+        // nommbres
+
+
+        int rowInicial = row - 1;
+        int rowFinal = row + 2;
+        int columnaInicial = columna - 1;
+        int columnaFinal = columna + 2;
+
+        for (int rowI = rowInicial; rowI < rowFinal; rowI++) {
+            for (int columnaI = columnaInicial; columnaI < columnaFinal; columnaI++) {
+                if (ServicioCheckForCellLiveOrDie.CheckLimitComand.execute(row, columna)) {
+                    boolean casilla = estado.getData(row, columna);
+                    conteo.execute(casilla);
+                }
+            }
+        }
     }
 
     public boolean overpoplacion(int row, int columna) {

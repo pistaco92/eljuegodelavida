@@ -1,5 +1,7 @@
 public class Juego {
 
+    private static int tiempoDePausa = 1000;
+
     public static void run(boolean[][] seed) {
         Factory factory = Factory.createFactoryObject();
         GraficaDecorator servicio = factory.setSeed(seed).createGrafic().build();
@@ -18,7 +20,7 @@ public class Juego {
 
     private static void sleep() {
         try {
-            Thread.sleep(1000);
+            Thread.sleep(tiempoDePausa);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
