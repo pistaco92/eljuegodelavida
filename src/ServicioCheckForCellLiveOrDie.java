@@ -3,6 +3,9 @@ public class ServicioCheckForCellLiveOrDie {
     private Estado estado;
     private boolean[][] nextGen;
 
+    private static int rowLen;
+    private static int columnaLen;
+
 
     private static int umbralOverPoblacion = 2, umbralHiperPoblacion = 3, umbralRevivir = 3;
 
@@ -34,34 +37,33 @@ public class ServicioCheckForCellLiveOrDie {
     }
 
     public static ServicioCheckForCellLiveOrDie createFromEstado(Estado estado) {
-        int rowI = estado.getColumnLen();
-        int columnI = estado.getColumnLen();
-        boolean[][] nextGen = new boolean[rowI][columnI];
-        CheckLimitComand.limiteSuperior = rowI;
+        rowLen = estado.getColumnLen();
+        columnaLen = estado.getColumnLen();
+        boolean[][] nextGen = new boolean[rowLen][columnaLen];
+        CheckLimitComand.limiteSuperior = rowLen;
         return new ServicioCheckForCellLiveOrDie(estado, nextGen);
 
     };
     static ServicioCheckForCellLiveOrDie createFromSeed(Estado estado, boolean[][] seed) {
-        int rowI = seed.length;
-        int columnI = seed[0].length;
-        boolean[][] nextGen = new boolean[rowI][columnI];
-        ServicioCheckForCellLiveOrDie.CheckLimitComand.limiteSuperior = rowI;
+        rowLen = seed.length;
+        columnaLen = seed[0].length;
+        boolean[][] nextGen = new boolean[rowLen][columnaLen];
         return new ServicioCheckForCellLiveOrDie(estado, nextGen);
     }
 
 
     private void checkSorroundings(int row, int columna, ServicioCheckForCellLiveOrDie.SorroundingsCountCommand conteo) {
 
-        // nommbres
+        // nombres
 
 
-        int rowInicial = row - 1;
-        int rowFinal = row + 2;
-        int columnaInicial = columna - 1;
-        int columnaFinal = columna + 2;
+        int rowAnterior = row - 1;
+        int rowDespues = row + 1;
+        int columnaAnterior = columna - 1;
+        int columnaDespues = columna + 1;
 
-        for (int rowI = rowInicial; rowI < rowFinal; rowI++) {
-            for (int columnaI = columnaInicial; columnaI < columnaFinal; columnaI++) {
+        for (int rowIndex = rowAnterior; rowIndex <= rowDespues ; rowIndex++) {
+            for (int columnaIndex = columnaAnterior; columnaIndex <= columnaDespues ; columnaIndex++) {
                 if (ServicioCheckForCellLiveOrDie.CheckLimitComand.execute(row, columna)) {
                     boolean casilla = estado.getData(row, columna);
                     conteo.execute(casilla);
